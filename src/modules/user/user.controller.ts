@@ -1,16 +1,16 @@
 import { Controller, Get } from '@nestjs/common';
-import { UserService } from './user.service';
 import { ApiTags } from '@nestjs/swagger';
+import { UserService } from './user.service';
 
 @ApiTags('User Module')
 @Controller({
-  path: 'user'
+  path: 'user',
 })
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  testHello() {
-    return this.userService.test();
+  all() {
+    return this.userService.all();
   }
 }
