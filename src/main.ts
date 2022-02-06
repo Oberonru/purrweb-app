@@ -7,7 +7,7 @@ async function bootstrap() {
   const configuration = config();
   const { host, port } = configuration.http;
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   const options = new DocumentBuilder()
     .setTitle('Purrweb-app')

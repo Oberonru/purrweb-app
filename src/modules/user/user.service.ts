@@ -7,9 +7,22 @@ import { UserEntity } from './user.entity';
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly repository: Repository<UserEntity>) {
-  }
-  all() {
+    private readonly repository: Repository<UserEntity>,
+  ) {}
+
+  all(): Promise<UserEntity[]> {
     return this.repository.find();
+  }
+
+  findUserById(id: number): Promise<UserEntity> {
+    return this.repository.findOne(id);
+  }
+
+  findUserByEmail(email: string) {
+    return this.repository.findOne(email);
+  }
+
+  clearDb() {
+    return this.repository.clear();
   }
 }
