@@ -7,6 +7,8 @@ import configuration from './configuration/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserEntity } from './modules/user/user.entity';
+import { CommentEntity } from './modules/comment/comment.entity';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [
@@ -23,11 +25,12 @@ import { UserEntity } from './modules/user/user.entity';
       password: '123',
       database: 'trelloDb',
       synchronize: true,
-      entities: [UserEntity],
+      entities: [UserEntity, CommentEntity],
     }),
 
     UserModule,
     AuthModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
