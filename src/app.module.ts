@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { UserEntity } from './modules/user/user.entity';
 import { CommentEntity } from './modules/comment/comment.entity';
 import { CommentModule } from './modules/comment/comment.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CommentModule } from './modules/comment/comment.module';
     UserModule,
     AuthModule,
     CommentModule,
+    PassportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

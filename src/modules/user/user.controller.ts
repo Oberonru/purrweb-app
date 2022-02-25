@@ -1,7 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { UserEntity } from './user.entity';
 
 @ApiTags('User Module')
 @Controller({
@@ -10,27 +9,23 @@ import { UserEntity } from './user.entity';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiOperation({ summary: 'Find all user' })
-  @Get('all')
-  all(): Promise<UserEntity[]> {
-    return this.userService.all();
+  @Post('adduser')
+  addUser(@Body() data) {
+    return this.userService.addUser(data.username, data.email, data.password);
   }
 
-  @ApiOperation({ summary: 'Find user by id' })
-  @Get('findUser')
-  findUserById(@Param() id: number): Promise<UserEntity> {
-    return this.userService.findUserById(id);
+  @Get('getall')
+  getAll() {
+    return this.userService.getAll();
   }
 
-  @ApiOperation({ summary: 'Find user by emeil' })
-  @Get('findByEmail')
-  findUserByEmail(@Param() email: string) {
-    return this.userService.findUserByEmail(email);
+  @Get('finduserbyemail')
+  async findUserByEmail(@Body() email: string) {
+    return await this.userService.findUserByEmail(email);
   }
 
-  @ApiOperation({ summary: 'Clear a data base' })
-  @Get('clear')
+  @Get('cleardb')
   clearDb() {
-    return this.userService.clearDb();
+    return this.userService.clearDB();
   }
 }

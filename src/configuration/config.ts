@@ -7,5 +7,8 @@ export default () => {
     api: {
       trello: process.env.TRELLO_API,
     },
+    secretKey: {
+      key: process.env.SECRET,
+    },
   };
 };
