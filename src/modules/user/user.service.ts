@@ -3,12 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 
-export type User = {
-  userId: number;
-  username: string;
-  password: string;
-};
-
 @Injectable()
 export class UserService {
   constructor(
@@ -16,21 +10,16 @@ export class UserService {
     private readonly repository: Repository<UserEntity>,
   ) {}
 
-  async getUser(username: string): Promise<UserEntity | undefined> {
-    //return this.users.find((user) => user.username === username);
-    return this.repository.findOne({ username });
+  addUser(data) {
+    return this.repository.save(data);
   }
 
-  addUser(username: string, email: string, password: string) {
-    const user = this.repository.create();
-    user.username = username;
-    user.email = email;
-    user.password = password;
-    return this.repository.save(user);
+  async getUser(username: string): Promise<UserEntity | undefined> {
+    return await this.repository.findOne({ username });
   }
 
   getAll() {
-    return this.repository.find();
+    return this.repository.find({ relations: ['comments', 'columns'] });
   }
 
   async findUserByEmail(email: string): Promise<UserEntity> {

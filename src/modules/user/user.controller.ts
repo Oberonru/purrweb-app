@@ -1,6 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
+import { Role } from './role.enum';
+import { Roles } from './role/role.decorator';
+import { RoleGuard } from './role.guard';
 
 @ApiTags('User Module')
 @Controller({
@@ -9,19 +12,26 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('adduser')
+  @Post()
   addUser(@Body() data) {
-    return this.userService.addUser(data.username, data.email, data.password);
+    return this.userService.addUser(data);
   }
 
-  @Get('getall')
+  @Get('getUser')
+  getUser(@Body() username: string) {
+    return this.userService.getUser(username);
+  }
+
+  @Get('getAll')
+  @UseGuards(RoleGuard)
+  @Roles(Role.Admin)
   getAll() {
     return this.userService.getAll();
   }
 
-  @Get('finduserbyemail')
-  async findUserByEmail(@Body() email: string) {
-    return await this.userService.findUserByEmail(email);
+  @Get('findUserByEmail')
+  findUserByEmail(@Body() email: string) {
+    return this.userService.findUserByEmail(email);
   }
 
   @Get('cleardb')

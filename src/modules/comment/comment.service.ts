@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserEntity } from '../user/user.entity';
 import { CommentEntity } from './comment.entity';
 import { CommentDto } from './dto/comment.dto';
 
@@ -8,15 +9,31 @@ import { CommentDto } from './dto/comment.dto';
 export class CommentService {
   constructor(
     @InjectRepository(CommentEntity)
-    private readonly repository: Repository<CommentEntity>,
+    private readonly commentsRepository: Repository<CommentEntity>,
+
+    @InjectRepository(UserEntity)
+    private readonly usersRepository: Repository<UserEntity>,
   ) {}
 
-  all(): Promise<CommentEntity[]> {
-    return this.repository.find();
+  async addComment(data: CommentDto) {
+    const { userId, message } = data;
+    const user = await this.usersRepository.findOne(userId);
+    const comment = new CommentEntity();
+
+    console.log(user, 'user');
+
+    if (!user) {
+      throw new NotFoundException('User not foud');
+    }
+
+    comment.message = message;
+    comment.user = user;
+    await this.commentsRepository.save(comment);
+
+    return comment;
   }
 
-  add(data: CommentDto) {
-    const { message, author, recipient } = data;
-    return this.repository.save({ message });
+  getComments() {
+    return this.commentsRepository.find();
   }
 }

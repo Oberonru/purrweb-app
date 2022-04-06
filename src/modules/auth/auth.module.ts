@@ -18,7 +18,7 @@ import config from 'src/configuration/config';
     HttpModule,
     TypeOrmModule.forFeature([UserEntity]),
     JwtModule.register({
-      secret: config().secretKey.key,
+      secret: 'secret',
       signOptions: { expiresIn: '60s' },
     }),
     PassportModule,

@@ -1,18 +1,19 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CommentEntity } from './comment.entity';
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
-import { CommentDto } from './dto/comment.dto';
 
+@ApiTags('')
 @Controller({ path: 'comment' })
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
-  @Get('all')
-  all(): Promise<CommentEntity[]> {
-    return this.commentService.all();
+
+  @Get()
+  getComments() {
+    return this.commentService.getComments();
   }
 
-  @Post('add')
-  add(@Body() data: CommentDto) {
-    return this.commentService.add(data);
+  @Post()
+  addComment(@Body() data) {
+    return this.commentService.addComment(data);
   }
 }
